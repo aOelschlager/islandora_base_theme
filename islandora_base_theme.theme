@@ -12,7 +12,7 @@ use Drupal\Core\Template\Attribute;
  *
  * Replace Barrio setting options with subtheme ones.
  */
-function islandora_base_theme_bootstrap_sass_form_system_theme_settings_alter(&$form, FormStateInterface $form_state)
+function islandora_base_theme_form_system_theme_settings_alter(&$form, FormStateInterface $form_state)
 {
     $form['components']['navbar']['bootstrap_barrio_navbar_top_background']['#options'] = array(
         'bg-primary' => t('Primary') ,
@@ -37,7 +37,7 @@ function islandora_base_theme_bootstrap_sass_form_system_theme_settings_alter(&$
  *
  * Adds the title to the end of the breadcrumb.
  */
-function islandora_base_theme_bootstrap_sass_preprocess_breadcrumb(&$variables)
+function islandora_base_theme_preprocess_breadcrumb(&$variables)
 {
     if ($variables['breadcrumb'])
     {
@@ -57,7 +57,7 @@ function islandora_base_theme_bootstrap_sass_preprocess_breadcrumb(&$variables)
  *
  * Adds the iiif variable to the page twig file.
  */
-function islandora_base_theme_bootstrap_sass_preprocess_page(&$vars)
+function islandora_base_theme_preprocess_page(&$vars)
 {
     $vars['iiif_server_location'] = \Drupal::config('islandora_iiif.settings')->get('iiif_server');
 }
@@ -67,7 +67,7 @@ function islandora_base_theme_bootstrap_sass_preprocess_page(&$vars)
  *
  * Adds the iiif variable to the image twig file.
  */
-function islandora_base_theme_bootstrap_sass_preprocess_image(&$variables)
+function islandora_base_theme_preprocess_image(&$variables)
 {
     $variables['iiif_server_location'] = \Drupal::config('islandora_iiif.settings')->get('iiif_server');
     $variables['file_default_scheme'] = \Drupal::config('system.file')->get('default_scheme');
