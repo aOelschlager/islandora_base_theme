@@ -7,9 +7,9 @@ dependencies:
     - islandora
     - system
   theme:
-    - islandora_install_profile_demo_bootstrap_sass
-id: islandora_install_profile_demo_bootstrap_sass_branding
-theme: islandora_install_profile_demo_bootstrap_sass
+    - islandora_base_theme
+id: islandora_base_theme_branding
+theme: islandora_base_theme
 region: header
 weight: -9
 provider: null

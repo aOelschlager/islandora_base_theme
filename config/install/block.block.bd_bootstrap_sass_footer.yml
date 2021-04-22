@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - islandora_install_profile_demo_bootstrap_sass
-id: islandora_install_profile_demo_bootstrap_sass_footer
-theme: islandora_install_profile_demo_bootstrap_sass
+    - islandora_base_theme
+id: islandora_base_theme_footer
+theme: islandora_base_theme
 region: footer_second
 weight: -9
 provider: null

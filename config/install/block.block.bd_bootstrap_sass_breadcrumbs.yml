@@ -8,12 +8,12 @@ dependencies:
     - islandora
     - system
   theme:
-    - islandora_install_profile_demo_bootstrap_sass
+    - islandora_base_theme
 third_party_settings:
   block_class:
     classes: site__islandora_breadcrumbs
-id: islandora_install_profile_demo_bootstrap_sass_breadcrumbs
-theme: islandora_install_profile_demo_bootstrap_sass
+id: islandora_base_theme_breadcrumbs
+theme: islandora_base_theme
 region: breadcrumb
 weight: -9
 provider: null

@@ -6,9 +6,9 @@ dependencies:
   module:
     - fixed_block_content
   theme:
-    - islandora_install_profile_demo_bootstrap_sass
-id: islandora_install_profile_demo_bootstrap_sass_disclaimer
-theme: islandora_install_profile_demo_bootstrap_sass
+    - islandora_base_theme
+id: islandora_base_theme_disclaimer
+theme: islandora_base_theme
 region: footer_disclaimer
 weight: -9
 provider: null

@@ -4,9 +4,9 @@ dependencies:
   module:
     - user
   theme:
-    - islandora_install_profile_demo_bootstrap_sass
-id: islandora_install_profile_demo_bootstrap_sass_login
-theme: islandora_install_profile_demo_bootstrap_sass
+    - islandora_base_theme
+id: islandora_base_theme_login
+theme: islandora_base_theme
 region: footer_third
 weight: -9
 provider: null

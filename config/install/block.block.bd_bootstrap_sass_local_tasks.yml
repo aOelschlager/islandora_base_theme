@@ -2,9 +2,9 @@ langcode: en
 status: true
 dependencies:
   theme:
-    - islandora_install_profile_demo_bootstrap_sass
-id: islandora_install_profile_demo_bootstrap_sass_local_tasks
-theme: islandora_install_profile_demo_bootstrap_sass
+    - islandora_base_theme
+id: islandora_base_theme_local_tasks
+theme: islandora_base_theme
 region: content
 weight: -7
 provider: null

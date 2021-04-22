@@ -4,9 +4,9 @@ dependencies:
   module:
     - system
   theme:
-    - islandora_install_profile_demo_bootstrap_sass
-id: islandora_install_profile_demo_bootstrap_sass_messages
-theme: islandora_install_profile_demo_bootstrap_sass
+    - islandora_base_theme
+id: islandora_base_theme_messages
+theme: islandora_base_theme
 region: highlighted
 weight: -9
 provider: null
