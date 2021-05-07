@@ -6,6 +6,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Implements hook_form_system_theme_settings_alter() for settings form.
@@ -69,7 +70,45 @@ function islandora_base_theme_preprocess_page(&$vars)
  */
 function islandora_base_theme_preprocess_image(&$variables)
 {
-    $variables['iiif_server_location'] = \Drupal::config('islandora_iiif.settings')->get('iiif_server');
-    $variables['file_default_scheme'] = \Drupal::config('system.file')->get('default_scheme');
-    $variables['host'] = \Drupal::request()->getSchemeAndHttpHost();
+    // Build IIIF URL for the file at the size dictated by its image style.
+
+    // IIIF Server (from config).
+    $iiif_server = \Drupal::config('islandora_iiif.settings')->get('iiif_server');
+    $iiif_server = rtrim($iiif_server, '/');
+
+    // Get File URL, and strip out query params if the file isn't temporary.
+    $file_url = file_create_url($variables['uri']);
+    if (strpos($file_url, '/system/temporary') === false) {
+      $file_url = strstr($file_url, '?', TRUE);
+    }
+
+    // Get the size from the image style if applicable.
+    if (isset($variables['style_name']) && !empty($variables['style_name'])) {
+      $file_url = str_replace("/styles/" . $variables['style_name'] . "/", "/", $file_url);
+      $style_config = ImageStyle::load($variables['style_name'])->getEffects()->getConfiguration();
+      foreach($style_config as $config) { 
+        if(isset($config['data'])) {
+          if(isset($config['data']['height'])) {
+            $image_style_height = $config['data']['height'];
+          }
+          if(isset($config['data']['width'])) {
+            $image_style_width = $config['data']['width'];
+          }
+        }
+      }
+    }
+
+    // Strip out 'public' from the file url.
+    $file_url = str_replace("/sites/default/files/public", "/sites/default/files", $file_url);
+
+    // Set the size, defaulting to 'full'.
+    $size = "full";
+    if (isset($image_style_width) && isset($image_style_height)) {
+      $size = "!$image_style_width,$image_style_height";
+    }
+
+    // Buld the IIF URL.
+    $iiif_url = $iiif_server . '/' . urlencode($file_url) . '/full/' . $size . '/0/default.jpg';
+
+    $variables['iiif_url'] = $iiif_url;
 }
