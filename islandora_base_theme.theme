@@ -78,7 +78,8 @@ function islandora_base_theme_preprocess_image(&$variables)
 
     // Get File URL, and strip out query params if the file isn't temporary.
     $file_url = file_create_url($variables['uri']);
-    if (strpos($file_url, '/system/temporary') === false) {
+    if (strpos($file_url, '/system/temporary') === false
+      && strpos($file_url, '?') !== false) {
       $file_url = strstr($file_url, '?', TRUE);
     }
 
@@ -86,7 +87,7 @@ function islandora_base_theme_preprocess_image(&$variables)
     if (isset($variables['style_name']) && !empty($variables['style_name'])) {
       $file_url = str_replace("/styles/" . $variables['style_name'] . "/", "/", $file_url);
       $style_config = ImageStyle::load($variables['style_name'])->getEffects()->getConfiguration();
-      foreach($style_config as $config) { 
+      foreach($style_config as $config) {
         if(isset($config['data'])) {
           if(isset($config['data']['height'])) {
             $image_style_height = $config['data']['height'];
