@@ -9,3 +9,14 @@
     }
   }
 }
+.highlighted {
+    .facets-views-plugin {
+      display: none;
+    }
+  }
+
+.search-results__facets {
+  .js-form-item-search-api-fulltext, .form-actions {
+    display: none;
+  }
+}

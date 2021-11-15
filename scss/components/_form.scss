@@ -298,13 +298,15 @@ summary {
 
 // Buttons
 button,
-.button {
+.button,
+.button.btn {
   width: auto;
   position: relative;
   box-sizing: border-box;
   border-radius: $button-border-radius;
   border-width: $button-border-width;
   border-style: $button-border-style;
+  line-height: 2;
   transition: background-color, .15s, ease-in-out;
   cursor: pointer;
   text-decoration: none;
@@ -327,8 +329,7 @@ button,
 
 // Button styles for things that are not actually button elements.
 .button {
-  display: flex;
-  align-items: center;
+  display: inline-block;
 }
 
 // Action button
@@ -391,6 +392,15 @@ li[class*="action--"] {
         text-align: right;
       }
     }
+
+    //If just permalink
+    &.flex-end {
+      justify-content: flex-end;
+    }
+
+    > div:last-of-type {
+      margin-right: 0;
+    }
   }
 
   label {
@@ -432,6 +442,7 @@ button.close {
         text-transform: $button-text-transform;
         padding: $xxx-small $large;
         text-decoration: none;
+        font-weight: $font-weight-normal;
 
         &:hover,
         &:focus {
@@ -513,4 +524,10 @@ input:focus:-ms-input-placeholder {opacity: 0.2}
 
 fieldset label {
   margin-top: $medium;
+}
+
+.media-and-file-delete-confirm-form {
+  .item-list {
+    margin-bottom: $global-padding;
+  }
 }

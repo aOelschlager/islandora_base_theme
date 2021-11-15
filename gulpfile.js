@@ -70,7 +70,7 @@ function styles () {
 
 // Move the javascript files into our js folder
 function js () {
-  return gulp.src([paths.js.bootstrap, paths.js.jquery, paths.js.popper, paths.js.poppermap, paths.js.barrio])
+  return gulp.src([paths.js.bootstrap, paths.js.jquery, paths.js.popper, paths.js.poppermap, paths.js.barrio], {allowEmpty: true})
     .pipe(gulp.dest(paths.js.dest))
     .pipe(browserSync.stream())
 }

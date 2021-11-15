@@ -32,15 +32,18 @@
     {% if menu_level == 0 %}
       <div{{ attributes.addClass('nav navbar-nav') }}>
       {% for item in items %}
+        <li class="nav-item">
         {%
           set classes = [
-           'nav-link',
+           item.url.toString() | clean_class != '-user-login' ? 'nav-link',
             item.in_active_trail ? 'active',
             item.url.getOption('attributes').class ? item.url.getOption('attributes').class | join(' '),
             'nav-link-' ~ item.url.toString() | clean_class,
+            item.url.toString() | clean_class == '-user-login' ? 'button',
           ]
         %}
         {{ link(item.title, item.url, {'class': classes}) }}
+        </li>
       {% endfor %}
       </div>
     {% endif %}

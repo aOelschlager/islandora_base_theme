@@ -20,13 +20,17 @@
 {% if title %}
   <h3 class="view-title">{{ title }}</h3>
 {% endif %}
-{% if facets.views_block__solr_search_content__block_1 %}
+{% if facets %}
 <aside class="search-results__facets">
   <div class="search-results__facets--wide">
-    {% for facet in facets.views_block__solr_search_content__block_1 %}
-      {{ drupal_block(facet.id,  {label: facet.label|t}) }}
-    {% endfor %}
+    {{ facets }}
   </div>
+  <details class="search-results__facets--mobile">
+    <summary class="h5">Refine Search</summary>
+    <div>
+      {{ facets }}
+    </div>
+  </details>
 </aside>
 {% endif %}
   <section class="search-results__rows">

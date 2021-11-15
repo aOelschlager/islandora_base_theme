@@ -32,17 +32,20 @@
 
   .navbar-nav {
     .nav-link {
-      padding: $xx-small $large;
+      padding: $xxx-small $large $small;
       text-decoration: none;
+      font-weight: $font-weight-bold;
 
       &:hover,
       &:focus {
         text-decoration: none;
+        cursor: pointer;
       }
 
       span {
-        border-bottom: $border-width-heavy $border-style;
-        padding-bottom: $xxx-small;
+        border-bottom-width: $border-width-heavy;
+        border-bottom-style: $border-style;
+        padding-bottom: $xx-small;
       }
     }
 
@@ -52,10 +55,8 @@
   }
 }
 
-.dropdown-menu {
-  padding: 0;
+.dropdown .dropdown-menu {
   margin-top: 0;
-  border: none;
 
   .dropdown-item {
     padding: 0;
@@ -65,14 +66,15 @@
       padding: $xx-small $large;
       font-size: $h6-font-size;
 
+      span {
+        border-bottom-width: $border-width-heavy;
+        border-bottom-style: $border-style;
+        padding-bottom: $xxx-small;
+      }
+
       &:hover,
       &:focus {
         text-decoration: none;
-      }
-
-      span {
-        border-bottom: $border-width-heavy $border-style;
-        padding-bottom: $xxx-small;
       }
     }
   }

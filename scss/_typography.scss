@@ -1,4 +1,4 @@
-/* TYPOGRAPHY for islandora_install_profile_demo Bootstrap Barrio, with variables brought over from Carapace/Adaptivetheme */
+/* TYPOGRAPHY for BD Bootstrap Barrio, with variables brought over from Carapace/Adaptivetheme */
 
 /* Google Fonts */
 
@@ -65,7 +65,7 @@ article,
 details,
 .site-footer .nav-item,
 .site-footer .field__item {
-  a {
+  a:not(.button) {
     border-bottom: 1px dotted;
 
     &:hover,

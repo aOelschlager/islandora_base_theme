@@ -1,5 +1,5 @@
 /**
- * Color settings for islandora_install_profile_demo Bootstrap Barrio
+ * Color settings for BD Bootstrap Barrio
  ============================================================================ */
 
 
@@ -53,13 +53,15 @@ video,
 }
 
 .field--name-field-media-audio-file,
-.field--name-field-media-video-file {
+.field--name-field-media-video-file,
+.field--name-field-media-oembed-video {
   background-color: $border-color;
 }
 
 .media-download {
   .field--name-field-media-audio-file,
-  .field--name-field-media-video-file {
+  .field--name-field-media-video-file,
+  .field--name-field-media-oembed-video {
     background-color: transparent;
   }
 }
@@ -327,7 +329,7 @@ h2, .h2 {
 
 // facets
 .block-config-provider--facets-summary,
-.block-facet--links {
+[class*="block-facet--"] {
   .block__title {
     background-color: $body-background-color;
     border-bottom-color: $border-color;
@@ -655,6 +657,8 @@ h2, .h2 {
         border-color: transparent;
       }
 
+      &:hover,
+      &:focus,
       &.active {
         color: $link-color;
 
@@ -662,23 +666,14 @@ h2, .h2 {
           border-color: $link-color;
         }
       }
-
-      &:hover,
-      &:focus,
-      &.active:hover,
-      &.active:focus {
-        color: $resp-menu-hover-color;
-        background-color: $resp-menu-hover-background-color;
-
-        span {
-          border-color: $resp-menu-hover-color;
-        }
-      }
     }
   }
 }
 
 .dropdown-menu {
+  background-color: $resp-menu-background-color;
+  border-color: $border-color;
+
   .dropdown-item,
   .dropdown-item.active,
   .dropdown-item:active {
@@ -704,11 +699,8 @@ h2, .h2 {
 
     &:hover,
     &:focus {
-      color: $resp-menu-hover-color ;
-      background-color: $resp-menu-hover-background-color;
-
       span {
-        border-color: $resp-menu-hover-color;
+        border-color: $link-color
       }
     }
   }
@@ -885,12 +877,13 @@ input[type="week"] {
 
 /**
  * Collapsible details.
- *
- * @see collapse.js
- * @thanks http://nicolasgallagher.com/css-background-image-hacks/
  */
+
 details {
   border-color: $form-border-color;
+}
+
+details:not(.search-results__facets--mobile) {
   background-color: $form-details-background-color;
 
   details {
@@ -899,24 +892,29 @@ details {
 
     summary {
       border-color: $border-color-light;
+      border-bottom-color: $form-border-color;
       background-color: $border-color-light;
+    }
+  }
 
-      &:hover,
-      &:focus {
-        border-color: $success-border-color;
-      }
+  summary {
+    background-color: $form-details-background-color;
+
+    &:hover,
+    &:focus {
+      background-color: $border-color-light;
     }
   }
 }
 
-summary {
+summary,
+.search-results__facets--mobile summary {
   border-color: $form-border-color;
-  background-color: $form-details-background-color;
 
   &:hover,
   &:focus {
     outline: none;
-    background-color: $border-color-light;
+    background-color: $body-background-color;
   }
 }
 
@@ -1048,6 +1046,21 @@ form .marker {
 
 
 /**
+ * A-Z lists
+ ============================================================================ */
+ [class*="taxonomy-a-z"] {
+   .taxonomy-header {
+     border-color: $border-color;
+     background-color: $body-background-color;
+   }
+ }
+
+.az-list {
+  border-color: $border-color;
+}
+
+
+/**
  * Tabs.
  ============================================================================ */
 .horizontal-tabs-active-tab + details {
@@ -1133,6 +1146,9 @@ form .marker {
 
   .horizontal-tabs-panes,
   .ui-widget-content {
+    color: $text-color;
+    background-color: $body-background-color;
+
     .form-item,
     .field,
     .views-field {
@@ -1251,10 +1267,21 @@ button,
 }
 
 
-// Preview buttons should be neutral.
-#edit-preview {
-  background-color: $form-background-color;
-  color: $button-border-color;
+// Secondary button styles for second form aaction buttons
+.form-actions {
+  .button + .button {
+    color: $button-secondary-text-color;
+    background-color: $button-secondary-background-color;
+    border-color: $button-secondary-border-color;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: $button-secondary-text-hover-color;
+      background-color: $button-secondary-background-hover-color;
+      border-color: $button-secondary-background-hover-color;
+    }
+  }
 }
 
 

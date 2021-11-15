@@ -45,7 +45,12 @@
     {{ title }}
   {% endif %}
   {{ title_suffix }}
-  {% if header %}
+  {% if header.area_text_custom %}
+    {{ header.area_text_custom }}
+    <div class="taxonomy-header">
+      {{ header.view }}
+    </div>
+  {% else %}
     <div class="view-header">
       {{ header }}
     </div>

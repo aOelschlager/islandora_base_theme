@@ -4,7 +4,7 @@ Description: Bootstrap 4 with Sass
 */
 
 // import files
-/* IMPORTS for islandora_install_profile_demo Bootstrap Barrio */
+/* IMPORTS for BD Bootstrap Barrio */
 
 //@import url(font-awesome.min.css);
 // variables
@@ -45,7 +45,7 @@ Description: Bootstrap 4 with Sass
 @import "./components/navbar";
 //@import "./components/image-button";
 //@import "./components/indented";
-//@import "./components/item-list";
+@import "./components/item-list";
 //@import "./components/list-group";
 @import "./components/node";
 @import "./components/node-preview";

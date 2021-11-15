@@ -126,20 +126,23 @@ video {
 
 // make audio/video block level
 audio,
-video {
+video,
+.field--name-field-media-oembed-video iframe {
   display: block;
   margin: auto;
 }
 
 
 .field--name-field-media-audio-file,
-.field--name-field-media-video-file {
+.field--name-field-media-video-file,
+.field--name-field-media-oembed-video {
   padding: $xx-small;
 }
 
 .media-download {
   .field--name-field-media-audio-file,
-  .field--name-field-media-video-file {
+  .field--name-field-media-video-file,
+  .field--name-field-media-oembed-video {
     padding: 0;
   }
 }

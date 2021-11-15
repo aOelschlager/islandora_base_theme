@@ -1,0 +1,70 @@
+/**
+ * Item lists
+ ============================================================================ */
+
+/* Taxonomy Terms*/
+[class*="taxonomy-a-z"] {
+  .taxonomy-header {
+    border-top: $border-width $border-style;
+    border-bottom: $border-width $border-style;
+    padding: $global-padding 0;
+    margin: $global-padding * 3 0;
+    position: sticky;
+    top: 0;
+
+    a {
+      padding: $global-padding;
+      display: inline-block;
+    }
+  }
+}
+
+.user-logged-in {
+  [class*="taxonomy-a-z"] {
+    .taxonomy-header {
+      @media #{$tablet} {
+        top: 2.45rem;
+      }
+    }
+  }
+}
+
+.az-list {
+  border-bottom: $border-width $border-style;
+  padding-bottom: $global-padding * 3;
+  margin: $global-padding * 3 0;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+}
+
+.az-list {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    a {
+      border-bottom: $border-width dotted;
+
+      &:hover,
+      &:focus {
+        border-bottom: $border-width $border-style;
+        text-decoration: none;
+      }
+    }
+
+    @media #{$tablet} {
+      column-count: 2;
+    }
+
+    @media #{$wide} {
+      column-count: 4;
+    }
+
+    ul {
+      padding-left: $x-large;
+    }
+  }
+}
