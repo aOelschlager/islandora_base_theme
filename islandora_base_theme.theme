@@ -6,7 +6,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Template\Attribute;
-use Drupal\image\Entity\ImageStyle;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_form_system_theme_settings_alter() for settings form.
@@ -40,16 +40,101 @@ function islandora_base_theme_form_system_theme_settings_alter(&$form, FormState
  */
 function islandora_base_theme_preprocess_breadcrumb(&$variables)
 {
-    if ($variables['breadcrumb'])
-    {
-        $request = \Drupal::request();
-        $route_match = \Drupal::routeMatch();
-        $page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
-
-        if (!empty($page_title))
+    try{
+        if ($variables['breadcrumb'])
         {
-          $variables['breadcrumb'][] = ['text' => $page_title, 'attributes' => new Attribute(['class' => ['active']]) ];
+            $current_path = \Drupal::service('path.current')->getPath();
+            $current_path_alias = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+            // Adding this for Breadcrumbs on Taxonomy term page list.
+            if (strpos($current_path_alias, '/taxonomy/term/') !== false) {
+                $taxonomy_obj = explode('/', $current_path);
+                $taxonomy_id = $taxonomy_obj[3];
+                $loadedterm = Term::load($taxonomy_id);
+                $vocabularyId = $loadedterm->bundle();
+                $variables['parent_taxonomy_term'] = $vocabularyId;
+            }
+            $request = \Drupal::request();
+            $route_match = \Drupal::routeMatch();
+            $page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+
+            // If node has a parent, set the link.
+            $node = \Drupal::routeMatch()->getParameter('node');
+
+            if ($node and !($node instanceof \Drupal\node\NodeInterface)) {
+                // .../pages does not return node but does return NID. Retry loading node from NID.
+                $node = \Drupal::entityTypeManager()->getStorage('node')->load($node);
+            }
+
+            if ($node instanceof \Drupal\node\NodeInterface) {
+                if ($node->hasField('field_member_of') and !empty($node->get('field_member_of')->first())) {
+                    try {
+                        $nodeparent = $node->get('field_member_of')->first()->target_id;
+                        $parent_alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $nodeparent);
+                        $nodeparentlabel = $node->get('field_member_of')->entity->label();
+
+                        $parent_node = \Drupal::entityTypeManager()->getStorage('node')->load($nodeparent);                        
+                        if( $parent_node and $parent_node->hasField('field_member_of') and !empty($parent_node->get('field_member_of')->first())) {
+                            $grand_parent_node = $parent_node->get('field_member_of')->first()->target_id;
+                            $grand_parent_alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $grand_parent_node);
+                            $grand_nodeparent_label = $parent_node->get('field_member_of')->entity->label();
+                        }
+                    }
+                    catch (Exception $e) {
+                               // Log the exception to watchdog.
+                                watchdog_exception('type', $e);
+                    }
+                    if (!empty($nodeparent))
+                    {
+                        // Force order if current node is the same
+                        if ($node == \Drupal::routeMatch()->getParameter('node')) {
+                            if (isset($grand_parent_alias)) {
+                                $variables['breadcrumb'][] = array('text' => $grand_nodeparent_label, 'url' => $grand_parent_alias);
+                            }
+                            $variables['breadcrumb'][] = array('text' => $nodeparentlabel, 'url' => $parent_alias);
+                        } else {
+                            if (isset($grand_parent_alias)) {
+                                $variables['breadcrumb'][1] = array('text' => $grand_nodeparent_label, 'url' => $grand_parent_alias);
+                                $variables['breadcrumb'][2] = array('text' => $nodeparentlabel, 'url' => $parent_alias);
+                            } else {
+                                $variables['breadcrumb'][1] = array('text' => $nodeparentlabel, 'url' => $parent_alias);
+                            }
+                        }
+                    }
+                }
+            }
+            if (!empty($page_title))
+            {
+            $variables['breadcrumb'][] = ['text' => $page_title, 'attributes' => new Attribute(['class' => ['active']]) ];
+            }
+            // Fixes duplicated breadcrumbs
+            function remove_dup($linked_nodes) {
+                $tmp_list=array();
+                $modified_list=array();
+                for($n=0;$n<count($linked_nodes);$n++)
+                {
+                    $tmp_list[]=serialize($linked_nodes[$n]);
+                }
+                $mat=array_unique($tmp_list);
+                for($n=0;$n<count($linked_nodes);$n++)
+                {
+                    if (isset($mat[$n])) {
+                        $modified_list[]=unserialize($mat[$n]);
+                    }
+
+                }
+                
+                if (($key = array_search(false, $modified_list)) !== false) {
+                    unset($modified_list[$key]);
+                }
+                return $modified_list;
+            }
+            // dd($variables['breadcrumb']);
+            $variables['breadcrumb'] = remove_dup($variables['breadcrumb']);
         }
+    }
+    catch (Exception $e) {
+        // Log the exception to watchdog.
+        watchdog_exception('type', $e);
     }
 }
 
@@ -70,46 +155,120 @@ function islandora_base_theme_preprocess_page(&$vars)
  */
 function islandora_base_theme_preprocess_image(&$variables)
 {
-    // Build IIIF URL for the file at the size dictated by its image style.
+    $variables['iiif_server_location'] = \Drupal::config('islandora_iiif.settings')->get('iiif_server');
+    $variables['file_default_scheme'] = \Drupal::config('system.file')->get('default_scheme');
+    $variables['host'] = \Drupal::request()->getSchemeAndHttpHost();
 
-    // IIIF Server (from config).
-    $iiif_server = \Drupal::config('islandora_iiif.settings')->get('iiif_server');
-    $iiif_server = rtrim($iiif_server, '/');
+    // Get the object title for the file to use as alt text instead of the filename.
 
-    // Get File URL, and strip out query params if the file isn't temporary.
-    $file_url = file_create_url($variables['uri']);
-    if (strpos($file_url, '/system/temporary') === false
-      && strpos($file_url, '?') !== false) {
-      $file_url = strstr($file_url, '?', TRUE);
-    }
+    // Start by getting the filename and removing any query params from the uri.
+    $filename = \Drupal::service('file_system')->basename($variables['uri']);
+    $filename = strstr($filename, '?', TRUE) ?: $filename;
+    $filename = urldecode($filename);
 
-    // Get the size from the image style if applicable.
-    if (isset($variables['style_name']) && !empty($variables['style_name'])) {
-      $file_url = str_replace("/styles/" . $variables['style_name'] . "/", "/", $file_url);
-      $style_config = ImageStyle::load($variables['style_name'])->getEffects()->getConfiguration();
-      foreach($style_config as $config) {
-        if(isset($config['data'])) {
-          if(isset($config['data']['height'])) {
-            $image_style_height = $config['data']['height'];
-          }
-          if(isset($config['data']['width'])) {
-            $image_style_width = $config['data']['width'];
-          }
-        }
+    // Look up the file entity.
+    $files = \Drupal::entityTypeManager()->getStorage('file')->loadByProperties(['filename' => $filename]);
+    $file = reset($files);
+
+    if ($file) {
+      // Look up its referencing media.
+      $utils = \Drupal::service('islandora.utils');
+      $media = $utils->getReferencingMedia($file->id());
+      $media = reset($media);
+
+      if ($media) {
+        // Try and look up the parent node.
+        // If the node does not exist, use the media title as a fallback.
+        $node = $utils->getParentNode($media);
+        $title = $node ? $node->getTitle() : $media->getName();
+        $variables['alt'] = $title;
+        $variables['attributes']['alt'] = $title;
       }
     }
 
-    // Strip out 'public' from the file url.
-    $file_url = str_replace("/sites/default/files/public", "/sites/default/files", $file_url);
+    // Ensure alt texts are less than 100 characters.
+    // This avoids 'Long Alternative Text' accessibility errors.
+    $variables['alt'] = substr($variables['alt'], 0, 100);
+    $variables['attributes']['alt'] = substr($variables['attributes']['alt'], 0, 100);
+}
 
-    // Set the size, defaulting to 'full'.
-    $size = "full";
-    if (isset($image_style_width) && isset($image_style_height)) {
-      $size = "!$image_style_width,$image_style_height";
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function islandora_base_theme_suggestions_field(&$variables)
+{
+    $suggestions = [];
+    $element = $variables['element'];
+
+    $suggestions[] = 'field__' . $element['#field_type'];
+    $suggestions[] = 'field__' . $element['#field_name'];
+    $suggestions[] = 'field__' . $element['#entity_type'] . '__' . $element['#bundle'];
+    $suggestions[] = 'field__' . $element['#entity_type'] . '__' . $element['#field_name'];
+    $suggestions[] = 'field__' . $element['#entity_type'] . '__' . $element['#field_name'] . '__' . $element['#bundle'];
+
+    return $suggestions;
+}
+
+/**
+ * Implements hook_preprocess_media() for overriding download button.
+ *
+ * Adds the Islandora Access by terms as variable values to the media twig file.
+ */
+function islandora_base_theme_preprocess_media(&$variables)
+{
+  $group_content = \Drupal\group\Entity\GroupContent::loadByEntity($variables['media']);
+  if (!empty($group_content)) {
+    $group = reset($group_content)->getGroup();
+    $permission_checker = \Drupal::service('group_permission.checker');
+    $variables['show_download_button'] = $permission_checker->hasPermissionInGroup('view download button', \Drupal::currentUser(), $group);
+  }
+  else {
+    $variables['show_download_button'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_preprocess_field() for overriding fields.
+ *
+ * Adds the iiif variable to the field twig file.
+ */
+function islandora_base_theme_preprocess_field(&$variables)
+{
+    try {
+        // Fix youtube URLs for remote videos
+        if (isset($variables['items'][0]['content']['#attributes']['src'])) {
+            $URL_SOURCE = $variables['items'][0]['content']['#attributes']['src'];
+            $URL_YOUTUBE_MEDIA = 'https://www.youtube.com/media/oembed?url=https%3A//www.youtube.com/watch%3Fv%3D';
+            $URL_YOUTUBE_CORRECTED = 'https://www.youtube.com/embed/';
+            $URL_YOUTU_BE_URL = 'https://www.youtube.com/media/oembed?url=https%3A//youtu.be/';
+
+            // Fix: strip the value to it's simplest possible string for youtube to work.
+            if (str_starts_with($URL_SOURCE, $URL_YOUTUBE_MEDIA) || str_starts_with($URL_SOURCE, $URL_YOUTU_BE_URL)) {
+                $URL_SOURCE = str_replace($URL_YOUTU_BE_URL,$URL_YOUTUBE_CORRECTED,$URL_SOURCE);
+                $URL_SOURCE = str_replace($URL_YOUTUBE_MEDIA,$URL_YOUTUBE_CORRECTED,$URL_SOURCE);
+                // Strips out &max_width=0&max_height=0&hash=...
+                $URL_SOURCE = strstr(rawurldecode($URL_SOURCE), '&', true);
+            }
+
+            // Remove the embedded size upon save
+            $variables['items'][0]['content']['#attributes']['src'] = $URL_SOURCE;
+        }
+
+        if(isset($variables['element']['#view_mode'])) {
+            if($variables['element']['#view_mode'] == 'search_index') {
+                $show_button[] = 'false';
+            } else {
+                $show_button[] = 'true';
+            }
+        }
+        // If any are true set status to true.
+        $button_status = (in_array('true',  $show_button) ? true : false);
+        // Pass the button status to twig file.
+        $variables['show_download_button'] = $button_status;
     }
 
-    // Buld the IIF URL.
-    $iiif_url = $iiif_server . '/' . urlencode($file_url) . '/full/' . $size . '/0/default.jpg';
-
-    $variables['iiif_url'] = $iiif_url;
+    catch (Exception $e) {
+        // Log the exception to watchdog.
+        watchdog_exception('type', $e);
+    }
 }

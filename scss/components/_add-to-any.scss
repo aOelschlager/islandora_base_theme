@@ -1,6 +1,6 @@
 /**
  * Add to Any
- *  - styles for the Add to Any module as used in islandora_install_profile_demo Bootstrap Barrio
+ *  - styles for the Add to Any module as used in BD Bootstrap Barrio
  *  - https://www.drupal.org/project/addtoany
  ============================================================================ */
 
@@ -26,9 +26,13 @@
   display: inline-block;
   margin-bottom: $x-large;
 
-  a > .a2a_svg {
-    border-radius: 50%;
-    margin: 0.125em;
+  a {
+    border-bottom: 0;
+
+    > .a2a_svg {
+      border-radius: 50%;
+      margin: 0.125em;
+    }
   }
 
   a:first-of-type {

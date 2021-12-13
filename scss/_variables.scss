@@ -1,5 +1,5 @@
 //
-// Variable Settings for islandora_install_profile_demo Bootstrap Barrio, with variables brought over from Carapace/Adaptivetheme
+// Variable Settings for BD Bootstrap Barrio, with variables brought over from Carapace/Adaptivetheme
 //
 // This file sets global variables that will change many style aspects of the
 // theme. You can achieve a lot simply by tweaking the values of variables.
@@ -350,7 +350,7 @@ $form_input_button_select_height   : $form_input_height;
 $form-box-shadow                   : false;
 
 $form-details-background-color     : $border-color;
-$form-group-margin-bottom          : 0;
+$form-group-margin-bottom          : $global-padding;
 
 
 // Vertical Tabs
@@ -391,6 +391,7 @@ $button-primary-border-color       : $link-color;
 $button-secondary-text-color       : $link-color;
 $button-secondary-background-color : $text-background-color-light;
 $button-secondary-border-color     : $text-background-color-light;
+$button-secondary-text-hover-color:       $page-footer-disclaimer-color;
 $button-secondary-background-hover-color: $border-color-alt;
 
 

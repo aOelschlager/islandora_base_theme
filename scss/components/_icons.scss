@@ -1,6 +1,6 @@
 /**
  * @file
- * Visual styles for islandora_install_profile_demo Bootstrap Barrio's icons.
+ * Visual styles for BD Bootstrap Barrio's icons.
  */
 
  // block--footer-social-media //
@@ -9,7 +9,8 @@
    line-height: 0;
 
    svg {
-     margin-right: $small;
+     margin-right: $x-small;
+     margin-bottom: $x-small;
      // fill: currentColor; - don't override colors, branding violation
    }
  }

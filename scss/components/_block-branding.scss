@@ -1,5 +1,5 @@
 /**
- * Branding styles for islandora_install_profile_demo Bootstrap Barrio
+ * Branding styles for BD Bootstrap Barrio
  *  - Drupal core branding block.
  ============================================================================ */
 
@@ -40,7 +40,6 @@
   // wrapper around site name and slogan (byline)
   &__text {
     display: block;
-    line-height: 1.5rem;
     font-weight: normal;
     margin-right: $xxxx-small;
   }
@@ -74,7 +73,7 @@
   &__slogan {
     font-style: normal;
     font-size: $base-font-size;
-    padding: $small 0 0;
+    // padding: $small 0 0;
 
     @media #{$wide} {
       font-size: $base-font-size * 1.25;
