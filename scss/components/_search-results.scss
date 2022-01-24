@@ -105,14 +105,6 @@
       }
     }
   }
-
-  &__results {
-    @media #{$wide} {
-      display: grid;
-      grid-gap: $global-padding-percent;
-      grid-template-columns: 1fr 3fr;
-    }
-  }
 }
 
 .search-results__header {
@@ -320,13 +312,23 @@ body[class*="-pages"] {
 }
 
 // facets
-.block-config-provider--facets-summary,
-.block-facet--links {
-  .block__title {
-    border-bottom: $border-width $border-style;
-    font-weight: $font-weight-bold;
-    padding-bottom:S ($large - $medium);
+.view-footer {
+  .block-config-provider--facets-summary,
+  .block-facet--links {
+    display: block;
+
+    .block__title,
+    h3 {
+      border-bottom-width: $border-width;
+      border-bottom-style: $border-style;
+      font-weight: $font-weight-bold;
+      padding-bottom: ($large - $medium);
+    }
   }
+}
+
+.view-solr-search-content .view-footer {
+  text-align: left;
 }
 
 .block-config-provider--facets-summary {
@@ -358,42 +360,6 @@ body[class*="-pages"] {
   .form-row {
     display: block;
   }
-}
-
-.search-results__facets--mobile {
-  overflow-x: hidden;
-
-  summary {
-    margin-bottom: 0;
-    padding-left: 0;
-    display: flex;
-    justify-content: space-between;
-    border-width: 0;
-    border-bottom-width: $border-width;
-    border-bottom-style: $border-style;
-
-    &:after {
-      content: "+";
-      float: right;
-    }
-  }
-
-  &[open] {
-    border-bottom-width: $border-width;
-    border-bottom-style: $border-style;
-
-    summary:after {
-      content: "\2013";
-    }
-  }
-
-  .facet-item a {
-    border-bottom-width: 0;
-  }
-}
-
-.search-results__facets--wide {
-  display: none;
 }
 
 // Bottom search pager
@@ -463,6 +429,29 @@ body[class*="-pages"] {
       grid-template-columns: repeat(auto-fill, minmax(19.75rem, 1fr));
     }
   }
+   .view-solr-search-content {
+    display: grid;
+    grid-gap: 0 $global-padding-percent;
+    grid-template-columns: 1fr 3fr;
+
+    .view-header {
+      grid-column: 1 / span 2;
+    }
+
+    .search-results__header {
+      grid-column: 1 / span 2;
+    }
+
+    .view-content {
+      grid-column: 2;
+    }
+
+    .view-footer {
+      grid-column: 1;
+      grid-row: 3;
+      padding: 0;
+    }
+  }
 }
 
 @media #{$wide} {
@@ -477,13 +466,6 @@ body[class*="-pages"] {
     }
   }
 
-  .search-results__facets--wide {
-    display: block;
-  }
-
-  .search-results__facets--mobile {
-    display: none;
-  }
 }
 
 .view-footer {
