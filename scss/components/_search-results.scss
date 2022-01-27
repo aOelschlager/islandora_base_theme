@@ -478,4 +478,4 @@ body[class*="-pages"] {
 }
 
 // Prevent contextual menu links from breaking grid layouts
-.contextual{position:absolute;z-index:500;top:6px;right:0;}
+.contextual, div[data-contextual-id] {position:absolute;z-index:500;top:6px;right:0;}
