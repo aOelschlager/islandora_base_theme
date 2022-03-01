@@ -155,37 +155,6 @@ function islandora_base_theme_preprocess_page(&$vars)
  */
 function islandora_base_theme_preprocess_image(&$variables)
 {
-    $variables['iiif_server_location'] = \Drupal::config('islandora_iiif.settings')->get('iiif_server');
-    $variables['file_default_scheme'] = \Drupal::config('system.file')->get('default_scheme');
-    $variables['host'] = \Drupal::request()->getSchemeAndHttpHost();
-
-    // Get the object title for the file to use as alt text instead of the filename.
-
-    // Start by getting the filename and removing any query params from the uri.
-    $filename = \Drupal::service('file_system')->basename($variables['uri']);
-    $filename = strstr($filename, '?', TRUE) ?: $filename;
-    $filename = urldecode($filename);
-
-    // Look up the file entity.
-    $files = \Drupal::entityTypeManager()->getStorage('file')->loadByProperties(['filename' => $filename]);
-    $file = reset($files);
-
-    if ($file) {
-      // Look up its referencing media.
-      $utils = \Drupal::service('islandora.utils');
-      $media = $utils->getReferencingMedia($file->id());
-      $media = reset($media);
-
-      if ($media) {
-        // Try and look up the parent node.
-        // If the node does not exist, use the media title as a fallback.
-        $node = $utils->getParentNode($media);
-        $title = $node ? $node->getTitle() : $media->getName();
-        $variables['alt'] = $title;
-        $variables['attributes']['alt'] = $title;
-      }
-    }
-
     // Ensure alt texts are less than 100 characters.
     // This avoids 'Long Alternative Text' accessibility errors.
     $variables['alt'] = substr($variables['alt'], 0, 100);
