@@ -236,6 +236,7 @@ function islandora_base_theme_preprocess_field(&$variables)
 {
     try {
         // Fix youtube URLs for remote videos
+        
         if (isset($variables['items'][0]['content']['#attributes']['src'])) {
             $URL_SOURCE = $variables['items'][0]['content']['#attributes']['src'];
             $URL_YOUTUBE_MEDIA = 'https://www.youtube.com/media/oembed?url=https%3A//www.youtube.com/watch%3Fv%3D';
@@ -253,7 +254,7 @@ function islandora_base_theme_preprocess_field(&$variables)
             // Remove the embedded size upon save
             $variables['items'][0]['content']['#attributes']['src'] = $URL_SOURCE;
         }
-
+        
         if(isset($variables['element']['#view_mode'])) {
             if($variables['element']['#view_mode'] == 'search_index') {
                 $show_button[] = 'false';

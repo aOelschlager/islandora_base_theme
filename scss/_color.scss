@@ -671,20 +671,28 @@ h2, .h2 {
   }
 }
 
-.dropdown-menu {
-  background-color: $resp-menu-background-color;
-  border-color: $border-color;
+.dropdown .dropdown-menu {
+  background-color: rgba(200, 16, 46, .8);
+  border-color: $resp-menu-color;
+
+  .dropdown-item:active, .dropdown-item:focus, .dropdown-item:hover {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: rgba(143, 12, 43, .8);
+  }
 
   .dropdown-item,
   .dropdown-item.active,
   .dropdown-item:active {
-    color: $resp-menu-color;
-    background-color: $resp-menu-background-color;
+    color: #fff;
+    text-decoration: none;
+    background-color: rgba(200, 16, 46, .8);
   }
 
   .dropdown-item a {
     color: $resp-menu-color;
-    background-color: $resp-menu-background-color;
+    background-color: rgba(200, 16, 46, .8);
+
 
     span {
       border-color: transparent;
@@ -1949,6 +1957,12 @@ input.cke_dialog_ui_input_password {
  .card-group .field--type-image {
      margin: 0
  }
+
+ .card-img-top {
+  width: 100%;
+  height: 15vw;
+  object-fit: cover;
+}
 
  .slick {
      width: 100%;

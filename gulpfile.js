@@ -1,5 +1,5 @@
 let gulp = require('gulp'),
-  sass = require('gulp-sass'),
+  sass = require('gulp-sass')(require('sass')),
   sourcemaps = require('gulp-sourcemaps'),
   $ = require('gulp-load-plugins')(),
   cleanCss = require('gulp-clean-css'),
@@ -49,7 +49,7 @@ function styles () {
     }).on('error', sass.logError))
     .pipe($.postcss(postcssProcessors))
     .pipe(postcss([autoprefixer({
-      browsers: [
+      overrideBrowserslist: [
         'Chrome >= 35',
         'Firefox >= 38',
         'Edge >= 12',
