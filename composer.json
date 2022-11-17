@@ -5,7 +5,7 @@
     "homepage": "http://drupal.org/project/bootstrap_sass",
     "license": "GPL-2.0+",
     "require": {
-        "drupal/bootstrap_barrio": "5.x-dev",
+        "drupal/bootstrap_barrio": "^5.5",
         "drupal/bootstrap_sass": "5.x-dev"
     }
 }
