@@ -79,7 +79,7 @@ function js () {
 function serve () {
   browserSync.init({
     proxy: {
-      target: 'https://islandora.traefik.me',
+      target: 'https://islandorafour.traefik.me',
       ws: true
     }
   })
