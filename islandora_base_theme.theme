@@ -155,6 +155,7 @@ function islandora_base_theme_preprocess_page(&$vars)
  */
 function islandora_base_theme_preprocess_image(&$variables)
 {
+    /*
     $variables['iiif_server_location'] = \Drupal::config('islandora_iiif.settings')->get('iiif_server');
     $variables['file_default_scheme'] = \Drupal::config('system.file')->get('default_scheme');
     $variables['host'] = \Drupal::request()->getSchemeAndHttpHost();
@@ -185,6 +186,7 @@ function islandora_base_theme_preprocess_image(&$variables)
         $variables['attributes']['alt'] = $title;
       }
     }
+    */
 
     // Ensure alt texts are less than 100 characters.
     // This avoids 'Long Alternative Text' accessibility errors.
